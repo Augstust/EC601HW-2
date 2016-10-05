@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MealViewController.swift
 //  FoodTracker
 //
 //  Created by Zheheng Song on 9/30/16.
@@ -8,12 +8,17 @@
 
 import UIKit
 
-class ViewController: UIViewController,UITextFieldDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class MealViewController: UIViewController,UITextFieldDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     //Mark: property
+    var meal: Meal?
     @IBOutlet weak var nameTextField: UITextField!
-    @IBOutlet weak var mealNameLabel: UILabel!
     @IBOutlet weak var photoImageView: UIImageView!
+    @IBOutlet weak var ratingControl: RatingControl!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBAction func cancel(_ sender: UIBarButtonItem) {
+        dismiss(animated: true, completion: nil)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +33,6 @@ class ViewController: UIViewController,UITextFieldDelegate,UIImagePickerControll
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        mealNameLabel.text = textField.text
     }
     // MARK: UIImagePickerControllerDelegate
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -54,12 +58,15 @@ class ViewController: UIViewController,UITextFieldDelegate,UIImagePickerControll
             imagePickerController.delegate = self
             present(imagePickerController, animated: true, completion: nil)
     }
-    
-
-    @IBAction func setDefaultLabelText(_ sender: UIButton) {
-        mealNameLabel.text = "Default Text"
+    //Mark: Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if saveButton === sender as AnyObject{
+            let name = nameTextField.text ?? ""
+            let photo = photoImageView.image
+            let rating = ratingControl.rating
+            meal = Meal(name: name, photo: photo, rating: rating)
+        }
     }
-    
 
 }
 
